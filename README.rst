@@ -22,6 +22,8 @@ Requirements
 
 * Odoo 19.0 Community or Enterprise, Odoo.sh, or self-hosted Odoo.
 * Standard Odoo dependencies: Contacts and Discuss/Mail.
+* Use the dedicated ``19.0`` branch. Separate ``15.0`` through ``18.0``
+  branches provide the ports for earlier Odoo releases.
 
 Installation
 ------------

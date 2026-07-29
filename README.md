@@ -8,6 +8,22 @@ auditable Odoo workspace.
 ![License](https://img.shields.io/badge/license-OPL--1-blue)
 ![Dependencies](https://img.shields.io/badge/dependencies-Contacts%20%7C%20Mail-0F766E)
 
+## Supported Odoo versions
+
+Each supported Odoo release has a dedicated branch containing its
+version-specific Python, security, and view compatibility changes.
+
+| Odoo version | Branch |
+| --- | --- |
+| 19.0 | [`19.0`](https://github.com/ZetriSofu40/odoo-compliance-document-management/tree/19.0) |
+| 18.0 | [`18.0`](https://github.com/ZetriSofu40/odoo-compliance-document-management/tree/18.0) |
+| 17.0 | [`17.0`](https://github.com/ZetriSofu40/odoo-compliance-document-management/tree/17.0) |
+| 16.0 | [`16.0`](https://github.com/ZetriSofu40/odoo-compliance-document-management/tree/16.0) |
+| 15.0 | [`15.0`](https://github.com/ZetriSofu40/odoo-compliance-document-management/tree/15.0) |
+
+Select the branch matching the target Odoo server. Do not install a branch on
+a different major Odoo version.
+
 ## What the module solves
 
 Compliance evidence often lives across spreadsheets, shared folders, inboxes,
@@ -63,7 +79,8 @@ Additional captures:
 Clone the repository using the Odoo technical module name:
 
 ```bash
-git clone https://github.com/ZetriSofu40/odoo-compliance-document-management.git \
+git clone --branch 19.0 \
+  https://github.com/ZetriSofu40/odoo-compliance-document-management.git \
   compliance_document_management
 ```
 
@@ -121,4 +138,3 @@ Odoo Techno-Functional Consultant
 [Portfolio](https://www.kyawthureinthaung.com) ·
 [GitHub](https://github.com/ZetriSofu40) ·
 [Email](mailto:kyawthureinthaung40@outlook.com)
-
