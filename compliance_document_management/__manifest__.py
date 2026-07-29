@@ -1,9 +1,9 @@
 {
-    "name": "Compliance Document & Expiry Management",
-    "version": "17.0.1.0.0",
+    "name": "Compliance Documents",
+    "version": "17.0.1.0.1",
     "summary": "Centralized compliance documents, expiry reminders, renewals and audit history",
     "description": (
-        "Compliance Document & Expiry Management provides a company-wide "
+        "Compliance Documents provides a company-wide "
         "register for licenses, permits, insurance policies, certificates, "
         "identity documents, and other time-sensitive compliance evidence. "
         "It includes configurable reminder policies, activities, email "
