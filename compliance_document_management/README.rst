@@ -1,4 +1,4 @@
-Compliance Document & Expiry Management for Odoo 19
+Compliance Documents for Odoo 19
 =====================================================
 
 Centralize licenses, permits, insurance policies, certificates, agreements,
@@ -30,7 +30,7 @@ Installation
 
 * Copy ``compliance_document_management`` into an Odoo addons path.
 * Restart Odoo and update the Apps list.
-* Search for **Compliance Document & Expiry Management** and install it.
+* Search for **Compliance Documents** and install it.
 * Assign Compliance access rights to the appropriate users.
 * Review document types, evidence requirements, reminder thresholds and recipients.
 

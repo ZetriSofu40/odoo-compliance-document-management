@@ -4,7 +4,7 @@
               name="Compliance"
               sequence="45"
               groups="compliance_document_management.group_compliance_reader"
-              web_icon="compliance_document_management,static/description/icon.svg"/>
+              web_icon="compliance_document_management,static/description/icon.png"/>
 
     <menuitem id="menu_compliance_dashboard"
               name="Dashboard"
@@ -63,4 +63,3 @@
               action="action_compliance_document_tag"
               sequence="20"/>
 </odoo>
-
