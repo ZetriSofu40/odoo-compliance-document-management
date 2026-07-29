@@ -5,6 +5,7 @@
         <field name="model">compliance.document.type</field>
         <field name="arch" type="xml">
             <tree string="Document Types" multi_edit="1">
+                <field name="company_id" invisible="1"/>
                 <field name="sequence" widget="handle"/>
                 <field name="code"/>
                 <field name="name"/>
@@ -25,6 +26,7 @@
         <field name="arch" type="xml">
             <form string="Compliance Document Type">
                 <sheet>
+                    <field name="company_id" invisible="1"/>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-files-o">
                             <field name="document_count" widget="statinfo" string="Documents"/>

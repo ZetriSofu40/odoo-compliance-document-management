@@ -1,6 +1,12 @@
 Changelog
 =========
 
+16.0.1.0.2 (2026-07-29)
+-------------------------
+
+* Made company context available to check-company domains for every user.
+* Removed a calendar attribute that is unsupported by the Odoo 16 view schema.
+
 16.0.1.0.1 (2026-07-29)
 -------------------------
 
