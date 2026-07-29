@@ -414,7 +414,7 @@ class ComplianceDocument(models.Model):
             "type": "ir.actions.act_window",
             "name": _("Renewal History"),
             "res_model": "compliance.document",
-            "view_mode": "list,form",
+            "view_mode": "tree,form",
             "domain": [
                 "|",
                 ("id", "=", self.previous_document_id.id),
