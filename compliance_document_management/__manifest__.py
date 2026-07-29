@@ -1,6 +1,6 @@
 {
     "name": "Compliance Documents",
-    "version": "15.0.1.0.1",
+    "version": "15.0.1.0.2",
     "summary": "Centralized compliance documents, expiry reminders, renewals and audit history",
     "description": (
         "Compliance Documents provides a company-wide "

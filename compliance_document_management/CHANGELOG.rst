@@ -1,6 +1,11 @@
 Changelog
 =========
 
+15.0.1.0.2 (2026-07-29)
+-------------------------
+
+* Removed a calendar attribute that is unsupported by the Odoo 15 view schema.
+
 15.0.1.0.1 (2026-07-29)
 -------------------------
 

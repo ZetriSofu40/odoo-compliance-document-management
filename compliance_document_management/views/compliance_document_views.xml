@@ -237,7 +237,7 @@
         <field name="name">compliance.document.calendar</field>
         <field name="model">compliance.document</field>
         <field name="arch" type="xml">
-            <calendar string="Compliance Expiry Calendar" date_start="expiry_date" color="document_type_id" mode="month" event_limit="5" quick_create="0">
+            <calendar string="Compliance Expiry Calendar" date_start="expiry_date" color="document_type_id" mode="month" event_limit="5">
                 <field name="name"/>
                 <field name="holder_display_name"/>
                 <field name="compliance_state"/>
