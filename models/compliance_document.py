@@ -510,8 +510,7 @@ class ComplianceDocument(models.Model):
                     ("document_id", "=", document.id),
                     ("expiry_date_snapshot", "=", document.expiry_date),
                     ("threshold_days", "=", rule.days_before),
-                ],
-                limit=1,
+                ]
             )
             if existing:
                 continue

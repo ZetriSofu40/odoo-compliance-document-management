@@ -1,4 +1,4 @@
-Compliance Document & Expiry Management for Odoo 16
+Compliance Document & Expiry Management for Odoo 15
 =====================================================
 
 Centralize licenses, permits, insurance policies, certificates, agreements,
@@ -20,9 +20,9 @@ Highlights
 Requirements
 ------------
 
-* Odoo 16.0 Community or Enterprise, Odoo.sh, or self-hosted Odoo.
+* Odoo 15.0 Community or Enterprise, Odoo.sh, or self-hosted Odoo.
 * Standard Odoo dependencies: Contacts and Discuss/Mail.
-* Use the dedicated ``16.0`` branch. Separate version branches provide the
+* Use the dedicated ``15.0`` branch. Separate version branches provide the
   supported Odoo 15.0 through 19.0 ports.
 
 Installation

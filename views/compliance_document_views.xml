@@ -49,9 +49,9 @@
                 <sheet>
                     <field name="validity_mode" invisible="1"/>
                     <field name="active" invisible="1"/>
-                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" attrs="{'invisible': [('compliance_state', '!=', 'expired')]}"/>
-                    <widget name="web_ribbon" title="Expiring Soon" bg_color="text-bg-warning" attrs="{'invisible': [('compliance_state', '!=', 'due_soon')]}"/>
-                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <widget name="web_ribbon" title="Expired" bg_color="bg-danger" attrs="{'invisible': [('compliance_state', '!=', 'expired')]}"/>
+                    <widget name="web_ribbon" title="Expiring Soon" bg_color="bg-warning" attrs="{'invisible': [('compliance_state', '!=', 'due_soon')]}"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-secondary" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_reminder_logs" type="object" class="oe_stat_button" icon="fa-bell-o">
                             <field name="reminder_count" widget="statinfo" string="Reminders"/>
@@ -63,7 +63,7 @@
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" placeholder="e.g. 2026 Trade License"/></h1>
-                        <div class="d-flex gap-2 align-items-center">
+                        <div class="d-flex align-items-center">
                             <field name="reference" readonly="1" class="text-muted"/>
                             <field name="compliance_state" widget="badge"
                                    decoration-success="compliance_state in ('valid', 'permanent')"
@@ -166,17 +166,17 @@
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click o_kanban_record">
                             <div class="oe_kanban_content">
-                            <div class="d-flex justify-content-between align-items-start gap-2">
-                                <strong class="fs-5"><field name="name"/></strong>
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong class="h5"><field name="name"/></strong>
                                 <field name="compliance_state" widget="badge"
                                        decoration-success="compliance_state in ('valid', 'permanent')"
                                        decoration-warning="compliance_state == 'due_soon'"
                                        decoration-danger="compliance_state == 'expired'"/>
                             </div>
                             <div class="text-muted"><field name="reference"/> · <field name="document_type_id"/></div>
-                            <div class="mt-2"><i class="fa fa-building-o me-1" title="Holder"/><field name="holder_display_name"/></div>
+                            <div class="mt-2"><i class="fa fa-building-o mr-1" title="Holder"/><field name="holder_display_name"/></div>
                             <div t-if="record.expiry_date.raw_value" class="mt-1">
-                                <i class="fa fa-calendar me-1" title="Expiry Date"/>
+                                <i class="fa fa-calendar mr-1" title="Expiry Date"/>
                                 <field name="expiry_date"/>
                                 <span class="text-muted"> (<field name="days_to_expiry"/> days)</span>
                             </div>

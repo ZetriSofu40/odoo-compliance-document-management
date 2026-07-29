@@ -6,7 +6,6 @@
             <field name="model_id" ref="model_compliance_document"/>
             <field name="subject">Compliance reminder: {{ object.name }} expires on {{ object.expiry_date }}</field>
             <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
-            <field name="description">Sent by compliance reminder policies before a document expires</field>
             <field name="body_html" type="html">
 <div style="margin: 0; padding: 0; font-size: 13px;">
     <p>Hello <t t-out="object.responsible_user_id.name or ''">Compliance Officer</t>,</p>
@@ -28,4 +27,3 @@
         </record>
     </data>
 </odoo>
-

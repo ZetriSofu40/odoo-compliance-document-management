@@ -123,8 +123,7 @@ class ComplianceDocumentType(models.Model):
                     ("id", "!=", document_type.id),
                     ("code", "=", document_type.code),
                     ("company_id", "=", document_type.company_id.id or False),
-                ],
-                limit=1,
+                ]
             )
             if duplicate:
                 raise ValidationError(
