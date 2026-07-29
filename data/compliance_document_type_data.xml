@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="document_type_trade_license" model="compliance.document.type">
+        <field name="name">Trade License</field>
+        <field name="code">TRADE</field>
+        <field name="sequence">10</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+        <field name="default_validity_days">365</field>
+        <field name="description">Commercial registrations and business operating licenses.</field>
+    </record>
+    <record id="document_type_insurance" model="compliance.document.type">
+        <field name="name">Insurance Policy</field>
+        <field name="code">INS</field>
+        <field name="sequence">20</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+        <field name="default_validity_days">365</field>
+    </record>
+    <record id="document_type_permit" model="compliance.document.type">
+        <field name="name">Permit / Authority Approval</field>
+        <field name="code">PERMIT</field>
+        <field name="sequence">30</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+    </record>
+    <record id="document_type_certificate" model="compliance.document.type">
+        <field name="name">Professional Certificate</field>
+        <field name="code">CERT</field>
+        <field name="sequence">40</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+    </record>
+    <record id="document_type_identity" model="compliance.document.type">
+        <field name="name">Identity Document</field>
+        <field name="code">ID</field>
+        <field name="sequence">50</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+    </record>
+    <record id="document_type_contract" model="compliance.document.type">
+        <field name="name">Contract / Agreement</field>
+        <field name="code">CONTRACT</field>
+        <field name="sequence">60</field>
+        <field name="company_id" eval="False"/>
+        <field name="warning_days">90</field>
+    </record>
+    <record id="document_type_permanent" model="compliance.document.type">
+        <field name="name">Permanent Compliance Evidence</field>
+        <field name="code">PERM</field>
+        <field name="sequence">70</field>
+        <field name="company_id" eval="False"/>
+        <field name="validity_mode">permanent</field>
+        <field name="warning_days">0</field>
+        <field name="default_validity_days">0</field>
+    </record>
+
+    <!-- Trade license reminder policy -->
+    <record id="reminder_trade_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_trade_license"/>
+        <field name="days_before">90</field>
+        <field name="summary">Trade license renewal planning</field>
+    </record>
+    <record id="reminder_trade_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_trade_license"/>
+        <field name="days_before">30</field>
+        <field name="summary">Trade license expires within 30 days</field>
+    </record>
+    <record id="reminder_trade_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_trade_license"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: trade license expires within 7 days</field>
+    </record>
+    <record id="reminder_trade_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_trade_license"/>
+        <field name="days_before">0</field>
+        <field name="summary">Trade license expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+
+    <!-- Insurance reminder policy -->
+    <record id="reminder_insurance_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="days_before">90</field>
+        <field name="summary">Insurance renewal planning</field>
+    </record>
+    <record id="reminder_insurance_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="days_before">30</field>
+        <field name="summary">Insurance policy expires within 30 days</field>
+    </record>
+    <record id="reminder_insurance_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: insurance policy expires within 7 days</field>
+    </record>
+    <record id="reminder_insurance_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="days_before">0</field>
+        <field name="summary">Insurance policy expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+
+    <!-- Permit reminder policy -->
+    <record id="reminder_permit_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_permit"/>
+        <field name="days_before">90</field>
+        <field name="summary">Permit renewal planning</field>
+    </record>
+    <record id="reminder_permit_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_permit"/>
+        <field name="days_before">30</field>
+        <field name="summary">Permit expires within 30 days</field>
+    </record>
+    <record id="reminder_permit_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_permit"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: permit expires within 7 days</field>
+    </record>
+    <record id="reminder_permit_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_permit"/>
+        <field name="days_before">0</field>
+        <field name="summary">Permit expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+
+    <!-- Certificate reminder policy -->
+    <record id="reminder_certificate_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_certificate"/>
+        <field name="days_before">90</field>
+        <field name="summary">Certificate renewal planning</field>
+    </record>
+    <record id="reminder_certificate_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_certificate"/>
+        <field name="days_before">30</field>
+        <field name="summary">Certificate expires within 30 days</field>
+    </record>
+    <record id="reminder_certificate_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_certificate"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: certificate expires within 7 days</field>
+    </record>
+    <record id="reminder_certificate_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_certificate"/>
+        <field name="days_before">0</field>
+        <field name="summary">Certificate expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+
+    <!-- Identity document reminder policy -->
+    <record id="reminder_identity_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_identity"/>
+        <field name="days_before">90</field>
+        <field name="summary">Identity document renewal planning</field>
+    </record>
+    <record id="reminder_identity_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_identity"/>
+        <field name="days_before">30</field>
+        <field name="summary">Identity document expires within 30 days</field>
+    </record>
+    <record id="reminder_identity_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_identity"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: identity document expires within 7 days</field>
+    </record>
+    <record id="reminder_identity_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_identity"/>
+        <field name="days_before">0</field>
+        <field name="summary">Identity document expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+
+    <!-- Contract reminder policy -->
+    <record id="reminder_contract_90" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_contract"/>
+        <field name="days_before">90</field>
+        <field name="summary">Contract renewal planning</field>
+    </record>
+    <record id="reminder_contract_30" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_contract"/>
+        <field name="days_before">30</field>
+        <field name="summary">Contract expires within 30 days</field>
+    </record>
+    <record id="reminder_contract_7" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_contract"/>
+        <field name="days_before">7</field>
+        <field name="summary">Urgent: contract expires within 7 days</field>
+    </record>
+    <record id="reminder_contract_0" model="compliance.document.reminder.rule">
+        <field name="document_type_id" ref="document_type_contract"/>
+        <field name="days_before">0</field>
+        <field name="summary">Contract expires today</field>
+        <field name="recipient_mode">escalation</field>
+    </record>
+</odoo>
+

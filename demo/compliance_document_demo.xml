@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="compliance_tag_critical" model="compliance.document.tag">
+        <field name="name">Critical</field>
+        <field name="color">1</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="compliance_tag_legal" model="compliance.document.tag">
+        <field name="name">Legal</field>
+        <field name="color">3</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="compliance_tag_vendor" model="compliance.document.tag">
+        <field name="name">Vendor</field>
+        <field name="color">4</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="partner_demo_authority" model="res.partner">
+        <field name="name">Municipal Licensing Authority</field>
+        <field name="is_company" eval="True"/>
+    </record>
+    <record id="partner_demo_supplier" model="res.partner">
+        <field name="name">Demo Facilities Supplier</field>
+        <field name="is_company" eval="True"/>
+    </record>
+
+    <record id="document_demo_trade_license" model="compliance.document">
+        <field name="name">2026 Company Trade License</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_trade_license"/>
+        <field name="partner_id" ref="base.main_partner"/>
+        <field name="document_number">TL-DEMO-2026</field>
+        <field name="issuing_authority_id" ref="partner_demo_authority"/>
+        <field name="issue_date" eval="DateTime.today() - relativedelta(days=290)"/>
+        <field name="expiry_date" eval="DateTime.today() + relativedelta(days=75)"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_critical'), ref('compliance_tag_legal')])]"/>
+        <field name="workflow_state">active</field>
+        <field name="notes">Renewal preparation should begin no later than the 90-day reminder.</field>
+    </record>
+
+    <record id="document_demo_insurance" model="compliance.document">
+        <field name="name">Corporate Liability Insurance</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="partner_id" ref="base.main_partner"/>
+        <field name="document_number">INS-DEMO-2048</field>
+        <field name="issue_date" eval="DateTime.today() - relativedelta(days=120)"/>
+        <field name="expiry_date" eval="DateTime.today() + relativedelta(days=245)"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_legal')])]"/>
+        <field name="workflow_state">active</field>
+    </record>
+
+    <record id="document_demo_expired_permit" model="compliance.document">
+        <field name="name">Supplier Site Access Permit</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_permit"/>
+        <field name="partner_id" ref="partner_demo_supplier"/>
+        <field name="document_number">PERMIT-DEMO-17</field>
+        <field name="issuing_authority_id" ref="partner_demo_authority"/>
+        <field name="issue_date" eval="DateTime.today() - relativedelta(days=377)"/>
+        <field name="expiry_date" eval="DateTime.today() - relativedelta(days=12)"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_critical'), ref('compliance_tag_vendor')])]"/>
+        <field name="workflow_state">active</field>
+    </record>
+
+    <record id="document_demo_contract" model="compliance.document">
+        <field name="name">Facilities Service Agreement</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_contract"/>
+        <field name="partner_id" ref="partner_demo_supplier"/>
+        <field name="document_number">AGR-DEMO-2026-04</field>
+        <field name="issue_date" eval="DateTime.today() - relativedelta(days=358)"/>
+        <field name="expiry_date" eval="DateTime.today() + relativedelta(days=7)"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_critical'), ref('compliance_tag_vendor')])]"/>
+        <field name="workflow_state">renewal</field>
+    </record>
+
+    <record id="document_demo_permanent" model="compliance.document">
+        <field name="name">Board Compliance Resolution</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_permanent"/>
+        <field name="partner_id" ref="base.main_partner"/>
+        <field name="document_number">RES-DEMO-001</field>
+        <field name="issue_date" eval="DateTime.today() - relativedelta(years=2)"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_legal')])]"/>
+        <field name="workflow_state">active</field>
+    </record>
+
+    <record id="document_demo_draft" model="compliance.document">
+        <field name="name">New Vendor Insurance Evidence</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="document_type_id" ref="document_type_insurance"/>
+        <field name="partner_id" ref="partner_demo_supplier"/>
+        <field name="responsible_user_id" ref="base.user_admin"/>
+        <field name="tag_ids" eval="[Command.set([ref('compliance_tag_vendor')])]"/>
+        <field name="workflow_state">draft</field>
+    </record>
+</odoo>

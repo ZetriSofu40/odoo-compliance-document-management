@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_compliance_document_reader,compliance.document.reader,model_compliance_document,group_compliance_reader,1,0,0,0
+access_compliance_document_user,compliance.document.user,model_compliance_document,group_compliance_user,1,1,1,0
+access_compliance_document_manager,compliance.document.manager,model_compliance_document,group_compliance_manager,1,1,1,1
+access_compliance_document_type_reader,compliance.document.type.reader,model_compliance_document_type,group_compliance_reader,1,0,0,0
+access_compliance_document_type_manager,compliance.document.type.manager,model_compliance_document_type,group_compliance_manager,1,1,1,1
+access_compliance_reminder_rule_reader,compliance.document.reminder.rule.reader,model_compliance_document_reminder_rule,group_compliance_reader,1,0,0,0
+access_compliance_reminder_rule_manager,compliance.document.reminder.rule.manager,model_compliance_document_reminder_rule,group_compliance_manager,1,1,1,1
+access_compliance_tag_reader,compliance.document.tag.reader,model_compliance_document_tag,group_compliance_reader,1,0,0,0
+access_compliance_tag_manager,compliance.document.tag.manager,model_compliance_document_tag,group_compliance_manager,1,1,1,1
+access_compliance_reminder_log_reader,compliance.document.reminder.log.reader,model_compliance_document_reminder_log,group_compliance_reader,1,0,0,0
+

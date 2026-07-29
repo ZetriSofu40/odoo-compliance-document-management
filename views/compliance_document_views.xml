@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_compliance_document_list" model="ir.ui.view">
+        <field name="name">compliance.document.list</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <list string="Compliance Documents"
+                  multi_edit="1"
+                  decoration-danger="compliance_state == 'expired'"
+                  decoration-warning="compliance_state == 'due_soon'"
+                  decoration-muted="workflow_state in ('cancelled', 'superseded')">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="document_type_id"/>
+                <field name="holder_display_name"/>
+                <field name="document_number" optional="show"/>
+                <field name="expiry_date" optional="show"/>
+                <field name="days_to_expiry" optional="hide"/>
+                <field name="compliance_state" widget="badge"
+                       decoration-success="compliance_state in ('valid', 'permanent')"
+                       decoration-warning="compliance_state == 'due_soon'"
+                       decoration-danger="compliance_state == 'expired'"
+                       decoration-muted="compliance_state == 'missing'"/>
+                <field name="workflow_state" widget="badge" optional="show"/>
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" optional="hide"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="last_reminder_at" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_form" model="ir.ui.view">
+        <field name="name">compliance.document.form</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Document">
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="workflow_state != 'draft'"/>
+                    <button name="action_start_renewal" type="object" string="Start Renewal" class="btn-secondary" invisible="workflow_state != 'active' or validity_mode != 'expiring'"/>
+                    <button name="action_create_renewal" type="object" string="Create Renewal Draft" class="btn-primary" invisible="workflow_state != 'renewal' or renewal_count"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="workflow_state in ('cancelled', 'superseded')"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" groups="compliance_document_management.group_compliance_manager" invisible="workflow_state == 'draft'"/>
+                    <button name="action_check_reminders" type="object" string="Check Reminders" groups="compliance_document_management.group_compliance_manager" invisible="workflow_state not in ('active', 'renewal') or validity_mode != 'expiring'"/>
+                    <field name="workflow_state" widget="statusbar" statusbar_visible="draft,active,renewal,superseded,cancelled"/>
+                </header>
+                <sheet>
+                    <field name="validity_mode" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="compliance_state != 'expired'"/>
+                    <widget name="web_ribbon" title="Expiring Soon" bg_color="text-bg-warning" invisible="compliance_state != 'due_soon'"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_reminder_logs" type="object" class="oe_stat_button" icon="fa-bell-o">
+                            <field name="reminder_count" widget="statinfo" string="Reminders"/>
+                        </button>
+                        <button name="action_view_renewals" type="object" class="oe_stat_button" icon="fa-history" invisible="not renewal_count and not previous_document_id">
+                            <field name="renewal_count" widget="statinfo" string="Renewals"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. 2026 Trade License"/></h1>
+                        <div class="d-flex gap-2 align-items-center">
+                            <field name="reference" readonly="1" class="text-muted"/>
+                            <field name="compliance_state" widget="badge"
+                                   decoration-success="compliance_state in ('valid', 'permanent')"
+                                   decoration-warning="compliance_state == 'due_soon'"
+                                   decoration-danger="compliance_state == 'expired'"
+                                   decoration-muted="compliance_state == 'missing'"/>
+                        </div>
+                    </div>
+                    <group>
+                        <group string="Document">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="document_type_id" options="{'no_create_edit': True}"/>
+                            <field name="document_number"/>
+                            <field name="issuing_authority_id"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                        <group string="Ownership &amp; Responsibility">
+                            <field name="holder_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="partner_id" invisible="holder_type != 'partner'"/>
+                            <field name="holder_name" invisible="holder_type != 'other'"/>
+                            <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Validity">
+                            <field name="issue_date"/>
+                            <field name="expiry_date" invisible="validity_mode != 'expiring'"/>
+                            <field name="days_to_expiry" readonly="1" invisible="validity_mode != 'expiring' or not expiry_date"/>
+                            <field name="last_reminder_at" readonly="1" invisible="not last_reminder_at"/>
+                        </group>
+                        <group string="Official Evidence">
+                            <field name="document_file" filename="document_filename" widget="binary"/>
+                            <field name="document_filename" invisible="1"/>
+                            <div class="alert alert-info mb-0" role="alert" colspan="2" invisible="document_file">
+                                Upload the current official document when evidence is required.
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Renewal instructions, compliance conditions, internal references..."/>
+                        </page>
+                        <page string="Renewal Chain" name="renewals" invisible="not previous_document_id and not renewal_document_ids">
+                            <group>
+                                <field name="previous_document_id" readonly="1"/>
+                                <field name="renewal_document_ids" readonly="1">
+                                    <list create="0" edit="0" delete="0">
+                                        <field name="reference"/>
+                                        <field name="name"/>
+                                        <field name="document_number"/>
+                                        <field name="issue_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="workflow_state" widget="badge"/>
+                                        <field name="compliance_state" widget="badge"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Reminder Audit" name="reminders" invisible="not reminder_log_ids">
+                            <field name="reminder_log_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sent_at"/>
+                                    <field name="threshold_days"/>
+                                    <field name="expiry_date_snapshot"/>
+                                    <field name="recipient_user_id" widget="many2one_avatar_user"/>
+                                    <field name="channel" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_kanban" model="ir.ui.view">
+        <field name="name">compliance.document.kanban</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="compliance_state" sample="1" quick_create="false">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="document_type_id"/>
+                <field name="holder_display_name"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="compliance_state"/>
+                <field name="workflow_state"/>
+                <field name="responsible_user_id"/>
+                <field name="tag_ids"/>
+                <field name="activity_state"/>
+                <field name="activity_ids"/>
+                <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+                <templates>
+                    <t t-name="card">
+                        <main>
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <strong class="fs-5"><field name="name"/></strong>
+                                <field name="compliance_state" widget="badge"
+                                       decoration-success="compliance_state in ('valid', 'permanent')"
+                                       decoration-warning="compliance_state == 'due_soon'"
+                                       decoration-danger="compliance_state == 'expired'"/>
+                            </div>
+                            <div class="text-muted"><field name="reference"/> · <field name="document_type_id"/></div>
+                            <div class="mt-2"><i class="fa fa-building-o me-1" title="Holder"/><field name="holder_display_name"/></div>
+                            <div t-if="record.expiry_date.raw_value" class="mt-1">
+                                <i class="fa fa-calendar me-1" title="Expiry Date"/>
+                                <field name="expiry_date"/>
+                                <span class="text-muted"> (<field name="days_to_expiry"/> days)</span>
+                            </div>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="mt-2"/>
+                        </main>
+                        <footer>
+                            <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                            <field name="activity_ids" widget="kanban_activity"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_search" model="ir.ui.view">
+        <field name="name">compliance.document.search</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <search string="Compliance Documents">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="document_number"/>
+                <field name="document_type_id"/>
+                <field name="partner_id"/>
+                <field name="holder_display_name"/>
+                <field name="responsible_user_id"/>
+                <field name="tag_ids"/>
+                <filter name="my_documents" string="My Documents" domain="[('responsible_user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="valid" string="Valid" domain="[('compliance_state', '=', 'valid')]"/>
+                <filter name="due_soon" string="Expiring Soon" domain="[('compliance_state', '=', 'due_soon')]"/>
+                <filter name="expired" string="Expired" domain="[('compliance_state', '=', 'expired')]"/>
+                <filter name="missing" string="Missing Expiry" domain="[('compliance_state', '=', 'missing')]"/>
+                <filter name="permanent" string="No Expiry" domain="[('compliance_state', '=', 'permanent')]"/>
+                <separator/>
+                <filter name="renewal" string="Renewal in Progress" domain="[('workflow_state', '=', 'renewal')]"/>
+                <filter name="draft" string="Draft" domain="[('workflow_state', '=', 'draft')]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator invisible="1"/>
+                <filter invisible="1" name="activities_overdue" string="Late Activities" domain="[('my_activity_date_deadline', '&lt;', 'today')]"/>
+                <filter invisible="1" name="activities_today" string="Today Activities" domain="[('my_activity_date_deadline', '=', 'today')]"/>
+                <filter invisible="1" name="activities_upcoming_all" string="Future Activities" domain="[('my_activity_date_deadline', '&gt;', 'today')]"/>
+                <group>
+                    <filter name="group_status" string="Compliance Status" context="{'group_by': 'compliance_state'}"/>
+                    <filter name="group_workflow" string="Workflow" context="{'group_by': 'workflow_state'}"/>
+                    <filter name="group_type" string="Document Type" context="{'group_by': 'document_type_id'}"/>
+                    <filter name="group_responsible" string="Responsible" context="{'group_by': 'responsible_user_id'}"/>
+                    <filter name="group_expiry_month" string="Expiry Month" context="{'group_by': 'expiry_date:month'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_calendar" model="ir.ui.view">
+        <field name="name">compliance.document.calendar</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <calendar string="Compliance Expiry Calendar" date_start="expiry_date" color="document_type_id" mode="month" event_limit="5" quick_create="0">
+                <field name="name"/>
+                <field name="holder_display_name"/>
+                <field name="compliance_state"/>
+                <field name="responsible_user_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_pivot" model="ir.ui.view">
+        <field name="name">compliance.document.pivot</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <pivot string="Compliance Analysis" sample="1">
+                <field name="document_type_id" type="row"/>
+                <field name="compliance_state" type="col"/>
+                <field name="company_id" type="row" groups="base.group_multi_company"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_graph" model="ir.ui.view">
+        <field name="name">compliance.document.graph</field>
+        <field name="model">compliance.document</field>
+        <field name="arch" type="xml">
+            <graph string="Compliance Expiry Analysis" type="bar" sample="1">
+                <field name="expiry_date" interval="month"/>
+                <field name="compliance_state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_compliance_document" model="ir.actions.act_window">
+        <field name="name">Compliance Documents</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+        <field name="context">{'search_default_my_documents': 0}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Register your first compliance document</p>
+            <p>Track licenses, policies, permits, certificates and other evidence through expiry and renewal.</p>
+        </field>
+    </record>
+
+    <record id="action_compliance_dashboard" model="ir.actions.act_window">
+        <field name="name">Compliance Dashboard</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">kanban,list,calendar,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+        <field name="domain">[('workflow_state', 'not in', ('superseded', 'cancelled'))]</field>
+        <field name="context">{'group_by': 'compliance_state'}</field>
+    </record>
+
+    <record id="action_compliance_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Soon</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">list,kanban,form,calendar</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+        <field name="domain">[('compliance_state', '=', 'due_soon'), ('workflow_state', 'in', ('active', 'renewal'))]</field>
+    </record>
+
+    <record id="action_compliance_expired" model="ir.actions.act_window">
+        <field name="name">Expired Documents</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">list,kanban,form,calendar</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+        <field name="domain">[('compliance_state', '=', 'expired'), ('workflow_state', 'in', ('active', 'renewal'))]</field>
+    </record>
+
+    <record id="action_compliance_renewals" model="ir.actions.act_window">
+        <field name="name">Renewals</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">list,kanban,form,calendar</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+        <field name="domain">[('workflow_state', '=', 'renewal')]</field>
+    </record>
+
+    <record id="action_compliance_analysis" model="ir.actions.act_window">
+        <field name="name">Compliance Analysis</field>
+        <field name="res_model">compliance.document</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_compliance_document_search"/>
+    </record>
+</odoo>

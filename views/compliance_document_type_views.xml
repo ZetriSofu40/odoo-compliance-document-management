@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_compliance_document_type_list" model="ir.ui.view">
+        <field name="name">compliance.document.type.list</field>
+        <field name="model">compliance.document.type</field>
+        <field name="arch" type="xml">
+            <list string="Document Types" multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="validity_mode" widget="badge"/>
+                <field name="warning_days" optional="show"/>
+                <field name="default_validity_days" optional="hide"/>
+                <field name="require_attachment" optional="show"/>
+                <field name="default_responsible_user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_type_form" model="ir.ui.view">
+        <field name="name">compliance.document.type.form</field>
+        <field name="model">compliance.document.type</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Document Type">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-files-o">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Trade License"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code" placeholder="e.g. TRADE"/>
+                            <field name="validity_mode" widget="radio" options="{'horizontal': true}"/>
+                            <field name="default_validity_days" invisible="validity_mode != 'expiring'"/>
+                            <field name="warning_days" invisible="validity_mode != 'expiring'"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="default_responsible_user_id" widget="many2one_avatar_user"/>
+                            <field name="escalation_user_id" widget="many2one_avatar_user"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requirements" name="requirements">
+                            <group>
+                                <field name="require_document_number"/>
+                                <field name="require_issue_date"/>
+                                <field name="require_attachment"/>
+                            </group>
+                            <field name="description" placeholder="Explain when this type is used and what evidence is required..."/>
+                        </page>
+                        <page string="Reminder Policy" name="reminder_policy" invisible="validity_mode != 'expiring'">
+                            <field name="reminder_rule_ids" context="{'default_document_type_id': id}">
+                                <list editable="bottom" default_order="days_before desc">
+                                    <field name="days_before"/>
+                                    <field name="summary"/>
+                                    <field name="recipient_mode"/>
+                                    <field name="specific_user_id" widget="many2one_avatar_user" invisible="recipient_mode != 'specific'"/>
+                                    <field name="activity_type_id"/>
+                                    <field name="create_activity"/>
+                                    <field name="send_email"/>
+                                    <field name="active"/>
+                                    <field name="company_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                            <div class="alert alert-info mt-3" role="alert">
+                                The daily scheduler sends only the nearest applicable threshold, preventing reminder floods when a document is entered late.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_type_search" model="ir.ui.view">
+        <field name="name">compliance.document.type.search</field>
+        <field name="model">compliance.document.type</field>
+        <field name="arch" type="xml">
+            <search string="Document Types">
+                <field name="name"/>
+                <field name="code"/>
+                <filter name="expiring" string="Has Expiry Date" domain="[('validity_mode', '=', 'expiring')]"/>
+                <filter name="permanent" string="No Expiry Date" domain="[('validity_mode', '=', 'permanent')]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_validity" string="Validity" context="{'group_by': 'validity_mode'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_compliance_document_type" model="ir.actions.act_window">
+        <field name="name">Document Types</field>
+        <field name="res_model">compliance.document.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_compliance_document_type_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a compliance document type</p>
+            <p>Define required evidence, validity behavior, ownership defaults and reminder thresholds.</p>
+        </field>
+    </record>
+
+    <record id="view_compliance_document_tag_list" model="ir.ui.view">
+        <field name="name">compliance.document.tag.list</field>
+        <field name="model">compliance.document.tag</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" string="Compliance Tags">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_compliance_document_tag" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">compliance.document.tag</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_compliance_reminder_log_list" model="ir.ui.view">
+        <field name="name">compliance.document.reminder.log.list</field>
+        <field name="model">compliance.document.reminder.log</field>
+        <field name="arch" type="xml">
+            <list string="Reminder History" create="0" edit="0" delete="0" default_order="sent_at desc">
+                <field name="sent_at"/>
+                <field name="document_id"/>
+                <field name="threshold_days" string="Threshold"/>
+                <field name="expiry_date_snapshot"/>
+                <field name="recipient_user_id" widget="many2one_avatar_user"/>
+                <field name="channel" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_compliance_reminder_log_search" model="ir.ui.view">
+        <field name="name">compliance.document.reminder.log.search</field>
+        <field name="model">compliance.document.reminder.log</field>
+        <field name="arch" type="xml">
+            <search string="Reminder History">
+                <field name="document_id"/>
+                <field name="recipient_user_id"/>
+                <field name="expiry_date_snapshot"/>
+                <filter name="activity" string="Activity" domain="[('channel', 'in', ('activity', 'both'))]"/>
+                <filter name="email" string="Email" domain="[('channel', 'in', ('email', 'both'))]"/>
+                <group>
+                    <filter name="group_document" string="Document" context="{'group_by': 'document_id'}"/>
+                    <filter name="group_recipient" string="Recipient" context="{'group_by': 'recipient_user_id'}"/>
+                    <filter name="group_channel" string="Channel" context="{'group_by': 'channel'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'sent_at:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_compliance_reminder_log" model="ir.actions.act_window">
+        <field name="name">Reminder History</field>
+        <field name="res_model">compliance.document.reminder.log</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_compliance_reminder_log_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+</odoo>
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_compliance_root"
+              name="Compliance"
+              sequence="45"
+              groups="compliance_document_management.group_compliance_reader"
+              web_icon="compliance_document_management,static/description/icon.svg"/>
+
+    <menuitem id="menu_compliance_dashboard"
+              name="Dashboard"
+              parent="menu_compliance_root"
+              action="action_compliance_dashboard"
+              sequence="10"/>
+    <menuitem id="menu_compliance_documents"
+              name="All Documents"
+              parent="menu_compliance_root"
+              action="action_compliance_document"
+              sequence="20"/>
+    <menuitem id="menu_compliance_expiring"
+              name="Expiring Soon"
+              parent="menu_compliance_root"
+              action="action_compliance_expiring"
+              sequence="30"/>
+    <menuitem id="menu_compliance_expired"
+              name="Expired"
+              parent="menu_compliance_root"
+              action="action_compliance_expired"
+              sequence="40"/>
+    <menuitem id="menu_compliance_renewals"
+              name="Renewals"
+              parent="menu_compliance_root"
+              action="action_compliance_renewals"
+              sequence="50"/>
+
+    <menuitem id="menu_compliance_reporting"
+              name="Reporting"
+              parent="menu_compliance_root"
+              sequence="70"/>
+    <menuitem id="menu_compliance_analysis"
+              name="Compliance Analysis"
+              parent="menu_compliance_reporting"
+              action="action_compliance_analysis"
+              sequence="10"/>
+    <menuitem id="menu_compliance_reminder_history"
+              name="Reminder History"
+              parent="menu_compliance_reporting"
+              action="action_compliance_reminder_log"
+              sequence="20"/>
+
+    <menuitem id="menu_compliance_configuration"
+              name="Configuration"
+              parent="menu_compliance_root"
+              sequence="90"
+              groups="compliance_document_management.group_compliance_manager"/>
+    <menuitem id="menu_compliance_document_types"
+              name="Document Types"
+              parent="menu_compliance_configuration"
+              action="action_compliance_document_type"
+              sequence="10"/>
+    <menuitem id="menu_compliance_tags"
+              name="Tags"
+              parent="menu_compliance_configuration"
+              action="action_compliance_document_tag"
+              sequence="20"/>
+</odoo>
+
