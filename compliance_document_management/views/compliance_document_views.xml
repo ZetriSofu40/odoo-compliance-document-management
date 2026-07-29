@@ -9,6 +9,7 @@
                   decoration-danger="compliance_state == 'expired'"
                   decoration-warning="compliance_state == 'due_soon'"
                   decoration-muted="workflow_state in ('cancelled', 'superseded')">
+                <field name="company_id" column_invisible="True"/>
                 <field name="reference"/>
                 <field name="name"/>
                 <field name="document_type_id"/>
@@ -47,6 +48,7 @@
                     <field name="workflow_state" widget="statusbar" statusbar_visible="draft,active,renewal,superseded,cancelled"/>
                 </header>
                 <sheet>
+                    <field name="company_id" invisible="1"/>
                     <field name="validity_mode" invisible="1"/>
                     <field name="active" invisible="1"/>
                     <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="compliance_state != 'expired'"/>

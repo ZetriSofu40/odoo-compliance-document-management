@@ -1,6 +1,11 @@
 Changelog
 =========
 
+17.0.1.0.2 (2026-07-29)
+-------------------------
+
+* Made company context available to check-company domains for every user.
+
 17.0.1.0.1 (2026-07-29)
 -------------------------
 
