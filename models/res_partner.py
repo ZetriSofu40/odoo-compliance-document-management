@@ -16,12 +16,16 @@ class ResPartner(models.Model):
     )
 
     def _compute_compliance_document_count(self):
-        grouped = self.env["compliance.document"]._read_group(
+        grouped = self.env["compliance.document"].read_group(
             [("partner_id", "in", self.ids)],
             ["partner_id"],
-            ["__count"],
+            ["partner_id"],
         )
-        counts = {partner.id: count for partner, count in grouped}
+        counts = {
+            group["partner_id"][0]: group["partner_id_count"]
+            for group in grouped
+            if group["partner_id"]
+        }
         for partner in self:
             partner.compliance_document_count = counts.get(partner.id, 0)
 
@@ -36,4 +40,3 @@ class ResPartner(models.Model):
             "default_partner_id": self.id,
         }
         return action
-

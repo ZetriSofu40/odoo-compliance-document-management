@@ -84,12 +84,16 @@ class ComplianceDocumentType(models.Model):
 
     @api.depends_context("company")
     def _compute_document_count(self):
-        grouped = self.env["compliance.document"]._read_group(
+        grouped = self.env["compliance.document"].read_group(
             [("document_type_id", "in", self.ids)],
             ["document_type_id"],
-            ["__count"],
+            ["document_type_id"],
         )
-        counts = {document_type.id: count for document_type, count in grouped}
+        counts = {
+            group["document_type_id"][0]: group["document_type_id_count"]
+            for group in grouped
+            if group["document_type_id"]
+        }
         for document_type in self:
             document_type.document_count = counts.get(document_type.id, 0)
 

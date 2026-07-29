@@ -27,7 +27,7 @@
                 <field name="activity_ids" widget="list_activity" optional="show"/>
                 <field name="last_reminder_at" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
-                <field name="active" column_invisible="True"/>
+                <field name="active" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -38,25 +38,25 @@
         <field name="arch" type="xml">
             <form string="Compliance Document">
                 <header>
-                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="workflow_state != 'draft'"/>
-                    <button name="action_start_renewal" type="object" string="Start Renewal" class="btn-secondary" invisible="workflow_state != 'active' or validity_mode != 'expiring'"/>
-                    <button name="action_create_renewal" type="object" string="Create Renewal Draft" class="btn-primary" invisible="workflow_state != 'renewal' or renewal_count"/>
-                    <button name="action_cancel" type="object" string="Cancel" invisible="workflow_state in ('cancelled', 'superseded')"/>
-                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" groups="compliance_document_management.group_compliance_manager" invisible="workflow_state == 'draft'"/>
-                    <button name="action_check_reminders" type="object" string="Check Reminders" groups="compliance_document_management.group_compliance_manager" invisible="workflow_state not in ('active', 'renewal') or validity_mode != 'expiring'"/>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" attrs="{'invisible': [('workflow_state', '!=', 'draft')]}"/>
+                    <button name="action_start_renewal" type="object" string="Start Renewal" class="btn-secondary" attrs="{'invisible': ['|', ('workflow_state', '!=', 'active'), ('validity_mode', '!=', 'expiring')]}"/>
+                    <button name="action_create_renewal" type="object" string="Create Renewal Draft" class="btn-primary" attrs="{'invisible': ['|', ('workflow_state', '!=', 'renewal'), ('renewal_count', '!=', 0)]}"/>
+                    <button name="action_cancel" type="object" string="Cancel" attrs="{'invisible': [('workflow_state', 'in', ('cancelled', 'superseded'))]}"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" groups="compliance_document_management.group_compliance_manager" attrs="{'invisible': [('workflow_state', '=', 'draft')]}"/>
+                    <button name="action_check_reminders" type="object" string="Check Reminders" groups="compliance_document_management.group_compliance_manager" attrs="{'invisible': ['|', ('workflow_state', 'not in', ('active', 'renewal')), ('validity_mode', '!=', 'expiring')]}"/>
                     <field name="workflow_state" widget="statusbar" statusbar_visible="draft,active,renewal,superseded,cancelled"/>
                 </header>
                 <sheet>
                     <field name="validity_mode" invisible="1"/>
                     <field name="active" invisible="1"/>
-                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="compliance_state != 'expired'"/>
-                    <widget name="web_ribbon" title="Expiring Soon" bg_color="text-bg-warning" invisible="compliance_state != 'due_soon'"/>
-                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
+                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" attrs="{'invisible': [('compliance_state', '!=', 'expired')]}"/>
+                    <widget name="web_ribbon" title="Expiring Soon" bg_color="text-bg-warning" attrs="{'invisible': [('compliance_state', '!=', 'due_soon')]}"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_reminder_logs" type="object" class="oe_stat_button" icon="fa-bell-o">
                             <field name="reminder_count" widget="statinfo" string="Reminders"/>
                         </button>
-                        <button name="action_view_renewals" type="object" class="oe_stat_button" icon="fa-history" invisible="not renewal_count and not previous_document_id">
+                        <button name="action_view_renewals" type="object" class="oe_stat_button" icon="fa-history" attrs="{'invisible': [('renewal_count', '=', 0), ('previous_document_id', '=', False)]}">
                             <field name="renewal_count" widget="statinfo" string="Renewals"/>
                         </button>
                     </div>
@@ -82,22 +82,22 @@
                         </group>
                         <group string="Ownership &amp; Responsibility">
                             <field name="holder_type" widget="radio" options="{'horizontal': true}"/>
-                            <field name="partner_id" invisible="holder_type != 'partner'"/>
-                            <field name="holder_name" invisible="holder_type != 'other'"/>
+                            <field name="partner_id" attrs="{'invisible': [('holder_type', '!=', 'partner')]}"/>
+                            <field name="holder_name" attrs="{'invisible': [('holder_type', '!=', 'other')]}"/>
                             <field name="responsible_user_id" widget="many2one_avatar_user"/>
                         </group>
                     </group>
                     <group>
                         <group string="Validity">
                             <field name="issue_date"/>
-                            <field name="expiry_date" invisible="validity_mode != 'expiring'"/>
-                            <field name="days_to_expiry" readonly="1" invisible="validity_mode != 'expiring' or not expiry_date"/>
-                            <field name="last_reminder_at" readonly="1" invisible="not last_reminder_at"/>
+                            <field name="expiry_date" attrs="{'invisible': [('validity_mode', '!=', 'expiring')]}"/>
+                            <field name="days_to_expiry" readonly="1" attrs="{'invisible': ['|', ('validity_mode', '!=', 'expiring'), ('expiry_date', '=', False)]}"/>
+                            <field name="last_reminder_at" readonly="1" attrs="{'invisible': [('last_reminder_at', '=', False)]}"/>
                         </group>
                         <group string="Official Evidence">
                             <field name="document_file" filename="document_filename" widget="binary"/>
                             <field name="document_filename" invisible="1"/>
-                            <div class="alert alert-info mb-0" role="alert" colspan="2" invisible="document_file">
+                            <div class="alert alert-info mb-0" role="alert" colspan="2" attrs="{'invisible': [('document_file', '!=', False)]}">
                                 Upload the current official document when evidence is required.
                             </div>
                         </group>
@@ -106,7 +106,7 @@
                         <page string="Notes" name="notes">
                             <field name="notes" placeholder="Renewal instructions, compliance conditions, internal references..."/>
                         </page>
-                        <page string="Renewal Chain" name="renewals" invisible="not previous_document_id and not renewal_document_ids">
+                        <page string="Renewal Chain" name="renewals" attrs="{'invisible': [('previous_document_id', '=', False), ('renewal_document_ids', '=', False)]}">
                             <group>
                                 <field name="previous_document_id" readonly="1"/>
                                 <field name="renewal_document_ids" readonly="1">
@@ -122,7 +122,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Reminder Audit" name="reminders" invisible="not reminder_log_ids">
+                        <page string="Reminder Audit" name="reminders" attrs="{'invisible': [('reminder_log_ids', '=', False)]}">
                             <field name="reminder_log_ids" readonly="1">
                                 <tree create="0" edit="0" delete="0">
                                     <field name="sent_at"/>

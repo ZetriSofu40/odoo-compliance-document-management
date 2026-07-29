@@ -14,7 +14,7 @@
                 <field name="require_attachment" optional="show"/>
                 <field name="default_responsible_user_id" widget="many2one_avatar_user" optional="show"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
-                <field name="active" column_invisible="True"/>
+                <field name="active" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -30,7 +30,7 @@
                             <field name="document_count" widget="statinfo" string="Documents"/>
                         </button>
                     </div>
-                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" placeholder="e.g. Trade License"/></h1>
@@ -39,8 +39,8 @@
                         <group>
                             <field name="code" placeholder="e.g. TRADE"/>
                             <field name="validity_mode" widget="radio" options="{'horizontal': true}"/>
-                            <field name="default_validity_days" invisible="validity_mode != 'expiring'"/>
-                            <field name="warning_days" invisible="validity_mode != 'expiring'"/>
+                            <field name="default_validity_days" attrs="{'invisible': [('validity_mode', '!=', 'expiring')]}"/>
+                            <field name="warning_days" attrs="{'invisible': [('validity_mode', '!=', 'expiring')]}"/>
                         </group>
                         <group>
                             <field name="company_id" groups="base.group_multi_company"/>
@@ -58,18 +58,18 @@
                             </group>
                             <field name="description" placeholder="Explain when this type is used and what evidence is required..."/>
                         </page>
-                        <page string="Reminder Policy" name="reminder_policy" invisible="validity_mode != 'expiring'">
+                        <page string="Reminder Policy" name="reminder_policy" attrs="{'invisible': [('validity_mode', '!=', 'expiring')]}">
                             <field name="reminder_rule_ids" context="{'default_document_type_id': id}">
                                 <tree editable="bottom" default_order="days_before desc">
                                     <field name="days_before"/>
                                     <field name="summary"/>
                                     <field name="recipient_mode"/>
-                                    <field name="specific_user_id" widget="many2one_avatar_user" invisible="recipient_mode != 'specific'"/>
+                                    <field name="specific_user_id" widget="many2one_avatar_user" attrs="{'invisible': [('recipient_mode', '!=', 'specific')]}"/>
                                     <field name="activity_type_id"/>
                                     <field name="create_activity"/>
                                     <field name="send_email"/>
                                     <field name="active"/>
-                                    <field name="company_id" column_invisible="True"/>
+                                    <field name="company_id" invisible="1"/>
                                 </tree>
                             </field>
                             <div class="alert alert-info mt-3" role="alert">
