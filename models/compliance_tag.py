@@ -18,8 +18,10 @@ class ComplianceDocumentTag(models.Model):
         help="Leave empty to make this tag available to every company.",
     )
 
-    _name_company_unique = models.Constraint(
-        "UNIQUE(name, company_id)",
-        "A compliance tag with this name already exists for the company.",
-    )
-
+    _sql_constraints = [
+        (
+            "name_company_unique",
+            "UNIQUE(name, company_id)",
+            "A compliance tag with this name already exists for the company.",
+        ),
+    ]

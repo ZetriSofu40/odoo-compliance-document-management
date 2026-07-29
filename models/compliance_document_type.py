@@ -60,14 +60,18 @@ class ComplianceDocumentType(models.Model):
     )
     document_count = fields.Integer(compute="_compute_document_count")
 
-    _warning_days_nonnegative = models.Constraint(
-        "CHECK(warning_days >= 0)",
-        "The expiring-soon threshold cannot be negative.",
-    )
-    _default_validity_nonnegative = models.Constraint(
-        "CHECK(default_validity_days >= 0)",
-        "The default validity cannot be negative.",
-    )
+    _sql_constraints = [
+        (
+            "warning_days_nonnegative",
+            "CHECK(warning_days >= 0)",
+            "The expiring-soon threshold cannot be negative.",
+        ),
+        (
+            "default_validity_nonnegative",
+            "CHECK(default_validity_days >= 0)",
+            "The default validity cannot be negative.",
+        ),
+    ]
 
     @api.depends("name", "code")
     def _compute_display_name(self):
@@ -189,14 +193,18 @@ class ComplianceDocumentReminderRule(models.Model):
     create_activity = fields.Boolean(default=True)
     send_email = fields.Boolean(default=True)
 
-    _days_before_nonnegative = models.Constraint(
-        "CHECK(days_before >= 0)",
-        "Reminder days cannot be negative.",
-    )
-    _type_threshold_unique = models.Constraint(
-        "UNIQUE(document_type_id, days_before)",
-        "Only one reminder rule is allowed for each threshold.",
-    )
+    _sql_constraints = [
+        (
+            "days_before_nonnegative",
+            "CHECK(days_before >= 0)",
+            "Reminder days cannot be negative.",
+        ),
+        (
+            "type_threshold_unique",
+            "UNIQUE(document_type_id, days_before)",
+            "Only one reminder rule is allowed for each threshold.",
+        ),
+    ]
 
     @api.constrains("create_activity", "send_email")
     def _check_delivery_channel(self):
@@ -214,4 +222,3 @@ class ComplianceDocumentReminderRule(models.Model):
             raise ValidationError(
                 _("Select a specific user for rules using the Specific User recipient.")
             )
-

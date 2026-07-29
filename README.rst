@@ -1,4 +1,4 @@
-Compliance Document & Expiry Management for Odoo 19
+Compliance Document & Expiry Management for Odoo 18
 =====================================================
 
 Centralize licenses, permits, insurance policies, certificates, agreements,
@@ -20,10 +20,10 @@ Highlights
 Requirements
 ------------
 
-* Odoo 19.0 Community or Enterprise, Odoo.sh, or self-hosted Odoo.
+* Odoo 18.0 Community or Enterprise, Odoo.sh, or self-hosted Odoo.
 * Standard Odoo dependencies: Contacts and Discuss/Mail.
-* Use the dedicated ``19.0`` branch. Separate ``15.0`` through ``18.0``
-  branches provide the ports for earlier Odoo releases.
+* Use the dedicated ``18.0`` branch. Separate version branches provide the
+  supported Odoo 15.0 through 19.0 ports.
 
 Installation
 ------------

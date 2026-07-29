@@ -158,7 +158,7 @@ class TestComplianceDocument(TransactionCase):
                 "email": "reader@example.com",
                 "company_id": self.company.id,
                 "company_ids": [Command.set([self.company.id])],
-                "group_ids": [
+                "groups_id": [
                     Command.set(
                         [
                             self.env.ref(
@@ -175,4 +175,3 @@ class TestComplianceDocument(TransactionCase):
         visible_document = self._create_document()
         with self.assertRaises(AccessError):
             visible_document.with_user(reader).write({"name": "Unauthorized Change"})
-

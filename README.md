@@ -1,10 +1,10 @@
-# Compliance Document & Expiry Management for Odoo 19
+# Compliance Document & Expiry Management for Odoo 18
 
 Centralize licences, permits, insurance policies, certificates, agreements,
 identity records, and other time-sensitive compliance evidence in one
 auditable Odoo workspace.
 
-![Odoo 19](https://img.shields.io/badge/Odoo-19-714B67)
+![Odoo 18](https://img.shields.io/badge/Odoo-18-714B67)
 ![License](https://img.shields.io/badge/license-OPL--1-blue)
 ![Dependencies](https://img.shields.io/badge/dependencies-Contacts%20%7C%20Mail-0F766E)
 
@@ -70,7 +70,7 @@ Additional captures:
 
 ## Requirements
 
-- Odoo 19.0 Community or Enterprise.
+- Odoo 18.0 Community or Enterprise.
 - Standard Odoo applications: Contacts and Discuss/Mail.
 - No third-party Python packages.
 
@@ -79,7 +79,7 @@ Additional captures:
 Clone the repository using the Odoo technical module name:
 
 ```bash
-git clone --branch 19.0 \
+git clone --branch 18.0 \
   https://github.com/ZetriSofu40/odoo-compliance-document-management.git \
   compliance_document_management
 ```
@@ -105,7 +105,7 @@ After installation:
 
 ## Running the tests
 
-From an Odoo 19 source checkout:
+From an Odoo 18 source checkout:
 
 ```bash
 ./odoo-bin -d <test_database> \

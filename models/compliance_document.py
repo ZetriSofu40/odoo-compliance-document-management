@@ -152,14 +152,18 @@ class ComplianceDocument(models.Model):
         store=True,
     )
 
-    _reference_unique = models.Constraint(
-        "UNIQUE(reference)",
-        "The compliance document reference must be unique.",
-    )
-    _previous_document_unique = models.Constraint(
-        "UNIQUE(previous_document_id)",
-        "A compliance document can have only one direct renewal.",
-    )
+    _sql_constraints = [
+        (
+            "reference_unique",
+            "UNIQUE(reference)",
+            "The compliance document reference must be unique.",
+        ),
+        (
+            "previous_document_unique",
+            "UNIQUE(previous_document_id)",
+            "A compliance document can have only one direct renewal.",
+        ),
+    ]
 
     @api.depends("holder_type", "partner_id", "holder_name")
     def _compute_holder_display_name(self):
@@ -658,10 +662,13 @@ class ComplianceDocumentReminderLog(models.Model):
     activity_id = fields.Many2one("mail.activity", readonly=True, ondelete="set null")
     mail_id = fields.Many2one("mail.mail", readonly=True, ondelete="set null")
 
-    _document_threshold_unique = models.Constraint(
-        "UNIQUE(document_id, expiry_date_snapshot, threshold_days)",
-        "This reminder threshold was already processed for the document expiry cycle.",
-    )
+    _sql_constraints = [
+        (
+            "document_threshold_unique",
+            "UNIQUE(document_id, expiry_date_snapshot, threshold_days)",
+            "This reminder threshold was already processed for the document expiry cycle.",
+        ),
+    ]
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_module_uninstall(self):
