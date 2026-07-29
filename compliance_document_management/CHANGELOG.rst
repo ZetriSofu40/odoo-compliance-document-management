@@ -1,6 +1,12 @@
 Changelog
 =========
 
+16.0.1.0.1 (2026-07-29)
+-------------------------
+
+* Prepared the app for Odoo Apps publication with a compliant product name,
+  stable technical module folder, and PNG application icon.
+
 16.0.1.0.0
 ------------
 

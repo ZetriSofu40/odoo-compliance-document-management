@@ -1,4 +1,4 @@
-# Compliance Document & Expiry Management for Odoo 16
+# Compliance Documents for Odoo 16
 
 Centralize licences, permits, insurance policies, certificates, agreements,
 identity records, and other time-sensitive compliance evidence in one
@@ -50,23 +50,23 @@ All screenshots use isolated demonstration data.
 
 ### Status dashboard
 
-![Compliance status dashboard](static/description/screenshots/02-compliance-dashboard.png)
+![Compliance status dashboard](compliance_document_management/static/description/screenshots/02-compliance-dashboard.png)
 
 ### Document ownership, renewal, reminders, and evidence
 
-![Compliance renewal workflow](static/description/screenshots/04-renewal-document-form.png)
+![Compliance renewal workflow](compliance_document_management/static/description/screenshots/04-renewal-document-form.png)
 
 ### Configurable reminder thresholds
 
-![Compliance reminder policy](static/description/screenshots/07-reminder-policy.png)
+![Compliance reminder policy](compliance_document_management/static/description/screenshots/07-reminder-policy.png)
 
 ### Compliance analysis
 
-![Compliance pivot analysis](static/description/screenshots/05-compliance-analysis.png)
+![Compliance pivot analysis](compliance_document_management/static/description/screenshots/05-compliance-analysis.png)
 
 Additional captures:
-[document register](static/description/screenshots/03-compliance-documents.png) and
-[document types](static/description/screenshots/06-document-types.png).
+[document register](compliance_document_management/static/description/screenshots/03-compliance-documents.png) and
+[document types](compliance_document_management/static/description/screenshots/06-document-types.png).
 
 ## Requirements
 
@@ -76,22 +76,23 @@ Additional captures:
 
 ## Installation
 
-Clone the repository using the Odoo technical module name:
+Clone the repository and add its root directory to the Odoo addons path:
 
 ```bash
 git clone --branch 16.0 \
-  https://github.com/ZetriSofu40/odoo-compliance-document-management.git \
-  compliance_document_management
+  https://github.com/ZetriSofu40/odoo-compliance-document-management.git
 ```
 
-Place `compliance_document_management` in an Odoo addons path, restart Odoo,
-update the Apps list, and install **Compliance Document & Expiry Management**.
+The repository contains the module in the stable
+`compliance_document_management` technical folder. Add the cloned repository
+root to the Odoo addons path, restart Odoo, update the Apps list, and install
+**Compliance Documents**.
 
 Command-line installation example:
 
 ```bash
 ./odoo-bin -d <database> \
-  --addons-path=addons,/path/to/custom/addons \
+  --addons-path=addons,/path/to/odoo-compliance-document-management \
   -i compliance_document_management \
   --stop-after-init
 ```
@@ -109,7 +110,7 @@ From an Odoo 16 source checkout:
 
 ```bash
 ./odoo-bin -d <test_database> \
-  --addons-path=addons,/path/to/custom/addons \
+  --addons-path=addons,/path/to/odoo-compliance-document-management \
   -i compliance_document_management \
   --test-enable \
   --stop-after-init
