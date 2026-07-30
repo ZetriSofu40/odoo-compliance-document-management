@@ -1,6 +1,12 @@
 Changelog
 =========
 
+17.0.1.0.3 (2026-07-29)
+-------------------------
+
+* Added a dedicated 1920 x 1080 Odoo Apps storefront banner.
+* Kept the compliance dashboard as an additional product screenshot.
+
 17.0.1.0.2 (2026-07-29)
 -------------------------
 
