@@ -1,6 +1,6 @@
 {
     "name": "Compliance Documents",
-    "version": "15.0.1.0.2",
+    "version": "15.0.1.0.3",
     "summary": "Centralized compliance documents, expiry reminders, renewals and audit history",
     "description": (
         "Compliance Documents provides a company-wide "
@@ -16,7 +16,10 @@
     "support": "kyawthureinthaung40@outlook.com",
     "website": "https://github.com/ZetriSofu40/odoo-compliance-document-management",
     "license": "OPL-1",
-    "images": ["static/description/screenshots/02-compliance-dashboard.png"],
+    "images": [
+        "static/description/screenshots/01-compliance-banner_screenshot.png",
+        "static/description/screenshots/02-compliance-dashboard.png",
+    ],
     "depends": ["base", "mail", "contacts"],
     "data": [
         "security/compliance_security.xml",
